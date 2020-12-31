@@ -13,24 +13,23 @@ class LexerTranslator:
         self.token_queue = []
 
     """
-    Funtion that tokenizes the file and while building a token will check if it is a keyword,
-    translate it, and add it to the buffer.
+    Funtion that tokenizes the file and while building a token will check if the word has a translation,
+    translate it if able, and add it to the buffer.
     """
     def tokenize(self):
         i = 0
         word_buffer = ""
         for c in self.input_stream:
-            if c != " " and c != ":":
-                word_buffer += c
-                i += 1
-            elif c == ":" or c == "" or c == " ":
+            if c == ":" or c == "" or c == " " or c == '(' or c == ')':
                 if self._is_keyword(word_buffer):
                     word_buffer = self._translate_keyword(word_buffer)
                 self.token_queue.append(word_buffer)
                 self.token_queue.append(c)
                 word_buffer = ""
                 i += 1
-        print(self.token_queue)
+            else:
+                word_buffer += c
+                i += 1
 
     def _is_keyword(self, token_to_check):
         return token_to_check in self.language_map.map
